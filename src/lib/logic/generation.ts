@@ -82,6 +82,29 @@ export const getHueShifts = (
     return palette
 }
 
+export const getLightnessShifts = (
+    baseColour: chroma.Color,
+    changePerShift: number,
+    shiftQuantity: number,
+    startingPoint: number = 0, // moves the base lightness by changePerShift * n
+) => {
+    const [baseLightness, baseChroma, baseHue] = baseColour.oklch()
+
+    const ligthnessModifier = changePerShift * startingPoint
+    const workingLightness = (baseLightness + ligthnessModifier) % MAX_LIGHTNESS
+
+    const palette: Array<chroma.Color> = []
+    for (let i = 0; i < shiftQuantity; i++) {
+        const calculatedLightness =
+            (workingLightness + changePerShift * i) % MAX_LIGHTNESS
+        palette.push(chroma(calculatedLightness, baseChroma, baseHue, 'oklch'))
+    }
+
+    return palette
+}
+
+
+
 /*
     NOTES
     chroma = intensity of the colour

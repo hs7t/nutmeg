@@ -10,16 +10,21 @@
         all: unset;
     }
 
+    nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
     .section {
         display: flex;
-        flex-shrink: 2;
         padding: 0.8ch;
 
         font-weight: 600;
         border-radius: 100;
     }
+
     .section.primary {
-        flex-grow: 1;
-        flex-shrink: 0;
+        flex: 1;
     }
 </style>

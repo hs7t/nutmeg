@@ -2,13 +2,18 @@
     --font-family-primary: 'Google Sans Flex', sans-serif;
 
     --t-color-primary: #222222;
-
     --t-color-background-A: #f4f4f4;
 
     --t-color-contrast-A: #222222;
     --t-color-contrast-B: #ffffff;
 
     --t-opacity-B: 80%;
+
+    /* Theme colours, to be changed programatically */
+    --t-color-theme-A: #083d77;
+    --t-color-theme-B: #f4d35e;
+    --t-color-theme-A-contrast: var(--t-color-contrast-B);
+    --t-color-theme-B-contrast: var(--t-color-contrast-A);
 }
 
 body {

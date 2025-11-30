@@ -1,4 +1,6 @@
 <script lang="ts">
+    import PinButton from '$lib/components/buttons/PinButton.svelte'
+
     class RGBColor {
         red: number
         green: number
@@ -40,4 +42,5 @@
     >
         {colour.name}
     </div>
+    <PinButton></PinButton>
 {/each}

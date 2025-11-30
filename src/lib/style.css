@@ -1,8 +1,20 @@
 :root {
     --font-family-primary: 'Google Sans Flex', sans-serif;
+
+    --t-color-primary: #222222;
+
+    --t-color-background-A: #f4f4f4;
+
+    --t-color-contrast-A: #222222;
+    --t-color-contrast-B: #ffffff;
+
+    --t-opacity-B: 80%;
 }
 
 body {
     font-family: var(--font-family-primary);
     font-variation-settings: 'wdth' 90;
+
+    background-color: var(--t-color-background-A);
+    color: var(--t-color-primary);
 }

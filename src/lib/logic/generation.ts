@@ -6,7 +6,7 @@ const MAX_HUE = 360
 const MAX_LIGHTNESS = 1
 const MAX_CHROMA = 0.4 // this is not the most you can have but screens and all
 
-export const getComplementaryColors = (
+export const getComplementaryColorPalette = (
     baseColour: chroma.Color,
     hueDivisions: number,
 ) => {
@@ -34,7 +34,7 @@ export const getComplementaryColors = (
     return palette
 }
 
-export const getHueShifts = (
+export const getHueShiftPalette = (
     baseColour: chroma.Color,
     changePerShift: number, // percentage of max oklch shift
     shiftQuantity: number,
@@ -56,7 +56,7 @@ export const getHueShifts = (
     return palette
 }
 
-export const getLightnessShifts = (
+export const getLightnessShiftPalette = (
     baseColour: chroma.Color,
     changePerShift: number, // percentage of max oklch shift
     shiftQuantity: number,
@@ -79,7 +79,7 @@ export const getLightnessShifts = (
     return palette
 }
 
-export const getChromaShifts = (
+export const getChromaShiftPalette = (
     baseColour: chroma.Color,
     changePerShift: number, // percentage of max oklch shift
     shiftQuantity: number,
@@ -117,16 +117,16 @@ export const getRandomPalette = (colorAmount = 4) => {
 
     const options = [
         () => {
-            return getLightnessShifts(baseColour, changePerShift, colorAmount)
+            return getLightnessShiftPalette(baseColour, changePerShift, colorAmount)
         },
         () => {
-            return getHueShifts(baseColour, changePerShift, colorAmount)
+            return getHueShiftPalette(baseColour, changePerShift, colorAmount)
         },
         () => {
-            return getChromaShifts(baseColour, changePerShift, colorAmount)
+            return getChromaShiftPalette(baseColour, changePerShift, colorAmount)
         },
         () => {
-            return getComplementaryColors(baseColour, colorAmount)
+            return getComplementaryColorPalette(baseColour, colorAmount)
         },
     ]
 
@@ -134,6 +134,48 @@ export const getRandomPalette = (colorAmount = 4) => {
     console.log(selection)
     return selection()
 }
+
+export const applyOKLCHPropertyShifts = (
+    colours: chroma.Color[],
+    targetProperty: OKLCHProperty,
+    shiftPercentage: number,
+) => {
+    // Shifts every targetProperty of colours by shiftPercentage of MAX_<property>
+
+    let targetPropertyAsIndex, targetPropertyMaximumValue
+
+    switch (targetProperty) {
+        case 'lightness':
+            ;[targetPropertyAsIndex, targetPropertyMaximumValue] = [
+                0,
+                MAX_LIGHTNESS,
+            ]
+            break
+        case 'chroma':
+            ;[targetPropertyAsIndex, targetPropertyMaximumValue] = [
+                1,
+                MAX_CHROMA,
+            ]
+            break
+        case 'hue':
+            ;[targetPropertyAsIndex, targetPropertyMaximumValue] = [2, MAX_HUE]
+            break
+    }
+
+    const shiftPercentageAsUnits =
+        (shiftPercentage * targetPropertyMaximumValue) / 100
+
+    const result: chroma.Color[] = []
+    let i = 0
+    for (const colour of colours) {
+        const oklchColour = colour.oklch()
+        oklchColour[targetPropertyAsIndex] += shiftPercentageAsUnits * i
+
+        result.push(chroma(oklchColour))
+        i++
+    }
+}
+
 /*
     NOTES
     chroma = intensity of the colour

@@ -3,37 +3,6 @@ import chroma from 'chroma-js'
 const MAX_HUE = 360
 const MAX_LIGHTNESS = 1
 
-export const getAnalogousPalette = (
-    baseColour: chroma.Color,
-    increment: number = 30,
-) => {
-    /*
-        WIKIPEDIA: Analogous color schemes (also called dominance harmony)
-        are groups of colors that are adjacent to each other on the color wheel,
-        with one being the dominant color, which tends to be a primary or
-        secondary color, and two on either side complementing, which tend to
-        be tertiary. This usually translates to a three-color combination
-        consisting of a base color and two colors that are 30 degrees and
-        330 degrees apart from the base color.
-
-        (increment = 30 will give you this setup)
-    */
-
-    const oklchColour = baseColour.oklch()
-
-    const baseLightness = oklchColour[0]
-    const baseChroma = oklchColour[1]
-    const baseHue = oklchColour[2]
-
-    const analogousAHue = (baseHue + increment) % MAX_HUE
-    const analogousBHue = (baseHue - increment) % MAX_HUE
-
-    const analogousA = chroma.oklch(baseLightness, baseChroma, analogousAHue)
-    const analogousB = chroma.oklch(baseLightness, baseChroma, analogousBHue)
-
-    return [oklchColour, analogousA, analogousB]
-}
-
 export const getComplementaryColors = (
     baseColour: chroma.Color,
     hueDivisions: number,
@@ -107,6 +76,24 @@ export const getRandomBaseColour = () => {
     return chroma.random()
 }
 
+export const getRandomPalette = (colorAmount = 4) => {
+    const baseColour = getRandomBaseColour()
+    const changePerShift = 30
+
+    const options = [
+        () => {
+            return getLightnessShifts(baseColour, changePerShift, colorAmount)
+        },
+        () => {
+            return getHueShifts(baseColour, changePerShift, colorAmount)
+        },
+        () => {
+            return getComplementaryColors(baseColour, colorAmount)
+        }
+    ]
+
+    return options[Math.floor(Math.random() * options.length)]()
+}
 /*
     NOTES
     chroma = intensity of the colour

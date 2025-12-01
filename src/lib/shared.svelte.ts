@@ -6,9 +6,14 @@ export type SwatchData = {
     locked: boolean
 }
 
-export const currentState = $state({
-    palette: [] as SwatchData[],
-})
+class AppState {
+    palette: SwatchData[] = []
+    generationProperties = {
+        colorAmount: 5
+    }
+}
+
+export const currentState = $state(new AppState)
 
 export const refreshPalette = () => {
     const generatedColours = getHueShifts(getRandomBaseColour(), 30, 4)

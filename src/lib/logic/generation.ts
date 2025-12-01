@@ -1,4 +1,5 @@
 import chroma from 'chroma-js'
+import randomColor from 'randomcolor'
 
 type OKLCHProperty = 'lightness' | 'chroma' | 'hue'
 
@@ -97,8 +98,13 @@ export const getShiftPalette = (
     return palette
 }
 
-export const getRandomBaseColour = () => {
-    return chroma.random()
+export const getRandomBaseColour = (): chroma.Color => {
+    const doRandom = Math.random() < 0.3
+    if (!doRandom) {
+        return chroma(randomColor())
+    } else {
+        return chroma.random()
+    }
 }
 
 export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {

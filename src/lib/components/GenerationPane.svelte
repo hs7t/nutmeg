@@ -25,5 +25,16 @@
         font-feature-settings: 'wdth' 70;
         border-radius: var(--t-border-radius-A);
         text-transform: uppercase;
+        transition: all 200ms;
+    }
+
+    button:hover {
+        transform: scale(1.02);
+        opacity: 90%;
+    }
+
+    button:active {
+        transform: perspective(20pt);
+        opacity: 1;
     }
 </style>

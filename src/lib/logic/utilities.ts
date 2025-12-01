@@ -10,3 +10,13 @@ export const chooseBestContrastingForColour = (
 
     return contrastA >= contrastB ? optionA : optionB
 }
+
+export const getCSSPropertyValue = (value: string, targetElement: HTMLElement, fallback = ''): string => {
+    if (!targetElement) return fallback
+
+    let found = window.getComputedStyle(targetElement).getPropertyValue(value)
+    const result = found ? found : fallback
+
+    console.log(value, found, fallback)
+    return result
+}

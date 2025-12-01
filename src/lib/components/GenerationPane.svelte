@@ -1,5 +1,9 @@
+<script>
+    import { refreshPalette } from '$lib/shared.svelte'
+</script>
+
 <div class="generation-pane">
-    <button>Generate</button>
+    <button onclick={() => refreshPalette()}>Generate</button>
 </div>
 
 <style>

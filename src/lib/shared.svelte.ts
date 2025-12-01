@@ -13,7 +13,18 @@ class AppState {
     }
 }
 
+class AppEvents extends EventTarget {}
+
+class GenerationEvent extends Event {
+    static readonly eventName = 'generation'
+
+    constructor() {
+        super(GenerationEvent.eventName, { bubbles: true, composed: true });
+    }
+}
+
 export const currentState = $state(new AppState)
+export const appEvents = new AppEvents()
 
 export const refreshPalette = () => {
     const generatedColours = getHueShifts(getRandomBaseColour(), 30, 4)
@@ -26,6 +37,8 @@ export const refreshPalette = () => {
             locked: false,
         })
     }
+    
+    appEvents.dispatchEvent(new GenerationEvent)
 }
 
 refreshPalette()

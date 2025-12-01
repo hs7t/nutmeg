@@ -2,7 +2,10 @@
     import type { SwatchData } from '$lib/shared.svelte'
 
     import chroma from 'chroma-js'
-    import { chooseBestContrastingForColour } from '$lib/logic/utilities'
+    import {
+        chooseBestContrastingForColour,
+        getCSSPropertyValue,
+    } from '$lib/logic/utilities'
 
     import PinButton from './buttons/PinButton.svelte'
 
@@ -10,25 +13,28 @@
 
     let element: HTMLElement | undefined = undefined
 
-    const getVariableValue = (value: string): string => {
-        const fallback = '#1e1e1e'
-        if (!element) return fallback
-
-        let found = window.getComputedStyle(element).getPropertyValue(value)
-        const result: string = found ? found : fallback
-
-        console.log(value, found, fallback)
-        return result
-    }
-
     let contrastingColor = $state('#000000')
 
     $effect(() => {
         if (!element) return
+
+        const constrastFallBack = '#000000'
         contrastingColor = chooseBestContrastingForColour(
             swatchData.colour,
-            chroma(getVariableValue('--t-color-contrast-A')),
-            chroma(getVariableValue('--t-color-contrast-B')),
+            chroma(
+                getCSSPropertyValue(
+                    '--t-color-contrast-A',
+                    element,
+                    constrastFallBack,
+                ),
+            ),
+            chroma(
+                getCSSPropertyValue(
+                    '--t-color-contrast-B',
+                    element,
+                    constrastFallBack,
+                ),
+            ),
         ).css('rgb')
     })
 </script>

@@ -101,7 +101,7 @@ export const getRandomBaseColour = () => {
     return chroma.random()
 }
 
-export const getRandomPalette = (colorAmount = 4) => {
+export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
     const baseColour = getRandomBaseColour()
 
     const maxChangePerShift = 32
@@ -146,7 +146,15 @@ export const getRandomPalette = (colorAmount = 4) => {
     ]
 
     const selection = options[Math.floor(Math.random() * options.length)] // seems useless right now but will be useful once more generation types available
-    return selection()
+    const palette = selection()
+
+    if (
+        colorAmount > 1 &&
+        chroma.deltaE(palette[0], palette[palette.length - 1]) < 2
+    ) {
+        return getRandomPalette(colorAmount)
+    }
+    return palette
 }
 
 /*

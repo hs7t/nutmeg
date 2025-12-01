@@ -47,7 +47,11 @@
             {swatchData.colour.hex()}
         </span>
     </div>
-    <PinButton />
+    <PinButton
+        action={() => {
+            swatchData.locked = !swatchData.locked
+        }}
+    />
 </div>
 
 <style>

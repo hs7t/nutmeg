@@ -34,7 +34,7 @@
         </svg>
     `
 
-    let { active = $bindable(false) } = $props()
+    let { active = $bindable(false), action } = $props()
     let currentSprite: string = $derived(
         active ? pinButtonFilledSVG : pinButtonDefaultSVG,
     )
@@ -44,6 +44,7 @@
     class="pin-button"
     onclick={() => {
         active = active ? false : true
+        action()
     }}
 >
     <span class="sprite">

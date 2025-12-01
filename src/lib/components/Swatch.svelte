@@ -67,6 +67,8 @@
 
         display: flex;
         flex-direction: row;
+        flex: 1;
+
         justify-content: space-between;
         align-items: center;
     }

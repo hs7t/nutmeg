@@ -26,7 +26,9 @@ export const currentState = $state({
 export const appEvents = new AppEvents()
 
 export const refreshPalette = () => {
-    const generatedColours = getRandomPalette(4)
+    const generatedColours = getRandomPalette(
+        currentState.generationProperties.colorAmount,
+    )
     currentState.palette = []
 
     for (const colour of generatedColours) {

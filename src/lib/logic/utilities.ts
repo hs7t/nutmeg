@@ -12,27 +12,33 @@ export const chooseBestContrastingForColour = (
     return contrastA > contrastB ? optionA : optionB
 }
 
-export const getNameForColour = async (
-    colour: chroma.Color,
-): Promise<string> => {
+export const getNamesForColours = async (
+    colours: chroma.Color[],
+): Promise<Array<string>> => {
     const url = new URL('https://api.color.pizza/v1/')
+
+    const colourHEXCodes: Array<string> = []
+    for (const colour of colours) {
+        colourHEXCodes.push(colour.hex())
+    }
+    const coloursSearchString = colours.join(',').replaceAll('#', '')
 
     let result
     try {
         result = (await ky
             .get(url, {
                 searchParams: {
-                    values: colour.hex().replace('#', ''),
+                    values: coloursSearchString,
                 },
             })
-            .json()) as string
-
-        result = JSON.parse(result)
+            .json()) as any
     } catch {
-        return ''
+        return colours.map(() => 'Unknown')
     }
 
-    return result.paletteTitle
+    return colours.map((_colour, i) => {
+        return result.colors[i]['name']
+    })
 }
 
 export const getCSSPropertyValue = (

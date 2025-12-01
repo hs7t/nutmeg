@@ -1,4 +1,6 @@
 import { getRandomPalette } from './logic/generation'
+import { getNamesForColours } from './logic/utilities'
+import chroma from 'chroma-js'
 
 export type SwatchData = {
     name: string
@@ -25,16 +27,17 @@ export const currentState = $state({
 
 export const appEvents = new AppEvents()
 
-export const refreshPalette = () => {
+export const refreshPalette = async () => {
     const generatedColours = getRandomPalette(
         currentState.generationProperties.colorAmount,
     )
     currentState.palette = []
 
-    for (const colour of generatedColours) {
+    const colourNames = await getNamesForColours(generatedColours)
+    for (let i = 0; i < generatedColours.length; i++) {
         currentState.palette.push({
-            name: 'Robbie',
-            colour,
+            name: colourNames[i],
+            colour: generatedColours[i],
             locked: false,
         })
     }

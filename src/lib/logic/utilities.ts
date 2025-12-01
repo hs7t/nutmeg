@@ -17,6 +17,5 @@ export const getCSSPropertyValue = (value: string, targetElement: HTMLElement, f
     let found = window.getComputedStyle(targetElement).getPropertyValue(value)
     const result = found ? found : fallback
 
-    console.log(value, found, fallback)
     return result
 }

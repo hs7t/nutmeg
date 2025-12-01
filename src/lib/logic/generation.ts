@@ -92,7 +92,9 @@ export const getRandomPalette = (colorAmount = 4) => {
         }
     ]
 
-    return options[Math.floor(Math.random() * options.length)]()
+    const selection = options[Math.floor(Math.random() * options.length)]
+    console.log(selection)
+    return selection()
 }
 /*
     NOTES

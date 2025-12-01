@@ -1,5 +1,8 @@
 :root {
-    --font-family-primary: 'Google Sans Flex', sans-serif;
+    --t-font-family-primary: 'Google Sans Flex', sans-serif;
+
+    --t-font-size-A: 1.2rem;
+    --t-font-size-B: 0.9rem;
 
     --t-color-primary: #222222;
     --t-color-background-A: #f4f4f4;
@@ -26,8 +29,9 @@
 }
 
 body {
-    font-family: var(--font-family-primary);
+    font-family: var(--t-font-family-primary);
     font-variation-settings: 'wdth' 90;
+    font-size: var(--t-font-size-A);
 
     background-color: var(--t-color-background-A);
     color: var(--t-color-primary);

@@ -1,19 +1,10 @@
 <script lang="ts">
-    import chroma from 'chroma-js'
-
-    import type { SwatchData } from './Swatch.svelte'
+    import { currentState } from '$lib/shared.svelte'
     import Swatch from './Swatch.svelte'
-
-    let swatches: Array<SwatchData> = [
-        {
-            name: 'Green',
-            colour: chroma('green'),
-        },
-    ]
 </script>
 
 <div class="swatch-view">
-    {#each swatches as swatchData, id (id)}
+    {#each currentState.palette as swatchData, id (id)}
         <Swatch {swatchData} />
     {/each}
 </div>

@@ -103,6 +103,10 @@ export const getLightnessShifts = (
     return palette
 }
 
+export const getRandomBaseColour = () => {
+    return chroma.random()
+}
+
 /*
     NOTES
     chroma = intensity of the colour

@@ -1,12 +1,5 @@
-<script module lang="ts">
-    export type SwatchData = {
-        name: string
-        colour: chroma.Color
-    }
-</script>
-
 <script lang="ts">
-    console.log('here!')
+    import type { SwatchData } from '$lib/shared.svelte'
 
     import chroma from 'chroma-js'
     import { chooseBestContrastingForColour } from '$lib/logic/utilities'

@@ -1,40 +1,57 @@
 import chroma from 'chroma-js'
 
+type OKLCHProperty = 'lightness' | 'chroma' | 'hue'
+
 const MAX_HUE = 360
 const MAX_LIGHTNESS = 1
+const MAX_CHROMA = 0.4 // this is not the most you can have but screens and all
 
-export const getAnalogousPalette = (
-    baseColour: chroma.Color,
-    increment: number = 30,
+export const applyOKLCHPropertyShifts = (
+    colours: chroma.Color[],
+    targetProperty: OKLCHProperty,
+    shiftPercentage: number,
 ) => {
-    /*
-        WIKIPEDIA: Analogous color schemes (also called dominance harmony)
-        are groups of colors that are adjacent to each other on the color wheel,
-        with one being the dominant color, which tends to be a primary or
-        secondary color, and two on either side complementing, which tend to
-        be tertiary. This usually translates to a three-color combination
-        consisting of a base color and two colors that are 30 degrees and
-        330 degrees apart from the base color.
+    // Shifts every targetProperty of colours by shiftPercentage of MAX_<property>
 
-        (increment = 30 will give you this setup)
-    */
+    let targetPropertyAsIndex, targetPropertyMaximumValue
 
-    const oklchColour = baseColour.oklch()
+    switch (targetProperty) {
+        case 'lightness':
+            ;[targetPropertyAsIndex, targetPropertyMaximumValue] = [
+                0,
+                MAX_LIGHTNESS,
+            ]
+            break
+        case 'chroma':
+            ;[targetPropertyAsIndex, targetPropertyMaximumValue] = [
+                1,
+                MAX_CHROMA,
+            ]
+            break
+        case 'hue':
+            ;[targetPropertyAsIndex, targetPropertyMaximumValue] = [2, MAX_HUE]
+            break
+    }
 
-    const baseLightness = oklchColour[0]
-    const baseChroma = oklchColour[1]
-    const baseHue = oklchColour[2]
+    const shiftPercentageAsUnits =
+        (shiftPercentage * targetPropertyMaximumValue) / 100
 
-    const analogousAHue = (baseHue + increment) % MAX_HUE
-    const analogousBHue = (baseHue - increment) % MAX_HUE
+    const result: chroma.Color[] = []
+    let i = 0
+    for (const colour of colours) {
+        const oklchColour = colour.oklch()
+        oklchColour[targetPropertyAsIndex] =
+            (oklchColour[targetPropertyAsIndex] + shiftPercentageAsUnits * i) %
+            targetPropertyMaximumValue
 
-    const analogousA = chroma.oklch(baseLightness, baseChroma, analogousAHue)
-    const analogousB = chroma.oklch(baseLightness, baseChroma, analogousBHue)
+        result.push(chroma(...oklchColour, 'oklch'))
+        i++
+    }
 
-    return [oklchColour, analogousA, analogousB]
+    return result
 }
 
-export const getComplementaryColors = (
+export const getComplementaryColorPalette = (
     baseColour: chroma.Color,
     hueDivisions: number,
 ) => {
@@ -62,49 +79,82 @@ export const getComplementaryColors = (
     return palette
 }
 
-export const getHueShifts = (
+export const getShiftPalette = (
+    property: OKLCHProperty,
     baseColour: chroma.Color,
-    changePerShift: number,
+    shiftPercentage: number, // percentage of max oklch shift
     shiftQuantity: number,
-    startingPoint: number = 0, // moves the base hue by changePerShift * n
+    // startingPoint: number = 0, // moves the base hue by changePerShift * n
 ) => {
-    const [baseLightness, baseChroma, baseHue] = baseColour.oklch()
+    let palette: Array<chroma.Color> = []
 
-    const hueModifier = changePerShift * startingPoint
-    const workingHue = (baseHue + hueModifier) % MAX_HUE
-
-    const palette: Array<chroma.Color> = []
     for (let i = 0; i < shiftQuantity; i++) {
-        const calculatedHue = (workingHue + changePerShift * i) % MAX_HUE
-        palette.push(chroma(baseLightness, baseChroma, calculatedHue, 'oklch'))
+        palette.push(baseColour)
     }
 
-    return palette
-}
-
-export const getLightnessShifts = (
-    baseColour: chroma.Color,
-    changePerShift: number,
-    shiftQuantity: number,
-    startingPoint: number = 0, // moves the base lightness by changePerShift * n
-) => {
-    const [baseLightness, baseChroma, baseHue] = baseColour.oklch()
-
-    const ligthnessModifier = changePerShift * startingPoint
-    const workingLightness = (baseLightness + ligthnessModifier) % MAX_LIGHTNESS
-
-    const palette: Array<chroma.Color> = []
-    for (let i = 0; i < shiftQuantity; i++) {
-        const calculatedLightness =
-            (workingLightness + changePerShift * i) % MAX_LIGHTNESS
-        palette.push(chroma(calculatedLightness, baseChroma, baseHue, 'oklch'))
-    }
+    palette = applyOKLCHPropertyShifts(palette, property, shiftPercentage)
 
     return palette
 }
 
 export const getRandomBaseColour = () => {
     return chroma.random()
+}
+
+export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
+    const baseColour = getRandomBaseColour()
+
+    const maxChangePerShift = 32
+    const minChangePerShift = 20
+    let changePerShift = Math.floor(
+        Math.random() * (maxChangePerShift - minChangePerShift) +
+            minChangePerShift,
+    )
+
+    const options = [
+        () => {
+            const availableProperties: OKLCHProperty[] = [
+                'lightness',
+                'chroma',
+                'hue',
+            ]
+            const availablePropertiesLastIndex = availableProperties.length - 1
+
+            let randomIndex = Math.round(
+                Math.random() * availablePropertiesLastIndex,
+            )
+            if (randomIndex > availablePropertiesLastIndex)
+                randomIndex = availablePropertiesLastIndex
+
+            const chosenProperty = availableProperties[randomIndex]
+            console.log(chosenProperty)
+
+            if (chosenProperty == 'hue') {
+                // trust me bro
+                changePerShift /= Math.floor(Math.random() * 3 - 1)
+            } else if (chosenProperty == 'chroma') {
+                changePerShift /= Math.floor(Math.random() * 2 - 1)
+            }
+
+            return getShiftPalette(
+                chosenProperty,
+                baseColour,
+                changePerShift,
+                colorAmount,
+            )
+        },
+    ]
+
+    const selection = options[Math.floor(Math.random() * options.length)] // seems useless right now but will be useful once more generation types available
+    const palette = selection()
+
+    if (
+        colorAmount > 1 &&
+        chroma.deltaE(palette[0], palette[palette.length - 1]) < 2
+    ) {
+        return getRandomPalette(colorAmount)
+    }
+    return palette
 }
 
 /*

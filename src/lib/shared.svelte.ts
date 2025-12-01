@@ -1,4 +1,4 @@
-import { getRandomBaseColour, getHueShifts } from './logic/generation'
+import { getRandomPalette } from './logic/generation'
 
 export type SwatchData = {
     name: string
@@ -12,22 +12,23 @@ class GenerationEvent extends Event {
     static readonly eventName = 'generation'
 
     constructor() {
-        super(GenerationEvent.eventName, { bubbles: true, composed: true });
+        super(GenerationEvent.eventName, { bubbles: true, composed: true })
     }
 }
-
 
 export const currentState = $state({
     palette: [] as SwatchData[],
     generationProperties: {
-        colorAmount: 5
-    }
+        colorAmount: 5,
+    },
 })
 
 export const appEvents = new AppEvents()
 
 export const refreshPalette = () => {
-    const generatedColours = getHueShifts(getRandomBaseColour(), 30, 4)
+    const generatedColours = getRandomPalette(
+        currentState.generationProperties.colorAmount,
+    )
     currentState.palette = []
 
     for (const colour of generatedColours) {
@@ -40,4 +41,3 @@ export const refreshPalette = () => {
 
     appEvents.dispatchEvent(new GenerationEvent())
 }
-

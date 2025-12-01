@@ -41,4 +41,3 @@ export const refreshPalette = () => {
     appEvents.dispatchEvent(new GenerationEvent())
 }
 
-refreshPalette()

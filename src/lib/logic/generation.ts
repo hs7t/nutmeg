@@ -40,9 +40,11 @@ export const applyOKLCHPropertyShifts = (
     let i = 0
     for (const colour of colours) {
         const oklchColour = colour.oklch()
-        oklchColour[targetPropertyAsIndex] += shiftPercentageAsUnits * i
+        oklchColour[targetPropertyAsIndex] =
+            (oklchColour[targetPropertyAsIndex] + shiftPercentageAsUnits * i) %
+            targetPropertyMaximumValue
 
-        result.push(chroma(oklchColour))
+        result.push(chroma(...oklchColour, 'oklch'))
         i++
     }
 
@@ -80,7 +82,7 @@ export const getComplementaryColorPalette = (
 export const getShiftPalette = (
     property: OKLCHProperty,
     baseColour: chroma.Color,
-    changePerShift: number, // percentage of max oklch shift
+    shiftPercentage: number, // percentage of max oklch shift
     shiftQuantity: number,
     // startingPoint: number = 0, // moves the base hue by changePerShift * n
 ) => {
@@ -90,7 +92,7 @@ export const getShiftPalette = (
         palette.push(baseColour)
     }
 
-    palette = applyOKLCHPropertyShifts(palette, property, changePerShift)
+    palette = applyOKLCHPropertyShifts(palette, property, shiftPercentage)
 
     return palette
 }
@@ -102,9 +104,9 @@ export const getRandomBaseColour = () => {
 export const getRandomPalette = (colorAmount = 4) => {
     const baseColour = getRandomBaseColour()
 
-    const maxChangePerShift = 40
-    const minChangePerShift = 10
-    const changePerShift = Math.floor(
+    const maxChangePerShift = 32
+    const minChangePerShift = 20
+    let changePerShift = Math.floor(
         Math.random() * (maxChangePerShift - minChangePerShift) +
             minChangePerShift,
     )
@@ -116,11 +118,24 @@ export const getRandomPalette = (colorAmount = 4) => {
                 'chroma',
                 'hue',
             ]
+            const availablePropertiesLastIndex = availableProperties.length - 1
 
-            const chosenProperty =
-                availableProperties[
-                    Math.floor(Math.random() * availableProperties.length)
-                ]
+            let randomIndex = Math.round(
+                Math.random() * availablePropertiesLastIndex,
+            )
+            if (randomIndex > availablePropertiesLastIndex)
+                randomIndex = availablePropertiesLastIndex
+
+            const chosenProperty = availableProperties[randomIndex]
+            console.log(chosenProperty)
+
+            if (chosenProperty == 'hue') {
+                // trust me bro
+                changePerShift /= Math.floor(Math.random() * 3 - 1)
+            } else if (chosenProperty == 'chroma') {
+                changePerShift /= Math.floor(Math.random() * 2 - 1)
+            }
+
             return getShiftPalette(
                 chosenProperty,
                 baseColour,
@@ -130,8 +145,7 @@ export const getRandomPalette = (colorAmount = 4) => {
         },
     ]
 
-    const selection = options[Math.floor(Math.random() * options.length)]
-    console.log(selection)
+    const selection = options[Math.floor(Math.random() * options.length)] // seems useless right now but will be useful once more generation types available
     return selection()
 }
 

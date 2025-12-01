@@ -99,7 +99,12 @@ export const getShiftPalette = (
 }
 
 export const getRandomBaseColour = (): chroma.Color => {
-    return chroma(randomColor({ luminosity: 'random' }))
+    const doRandom = Math.random() < 0.3
+    if (!doRandom) {
+        return chroma(randomColor())
+    } else {
+        return chroma.random()
+    }
 }
 
 export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {

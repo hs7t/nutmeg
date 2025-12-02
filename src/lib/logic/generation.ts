@@ -99,7 +99,7 @@ export const getShiftPalette = (
 }
 
 export const getRandomBaseColour = (): chroma.Color => {
-    const doRandom = Math.random() < 0.3
+    const doRandom = Math.random() < 0.1
     if (!doRandom) {
         return chroma(randomColor())
     } else {
@@ -111,7 +111,7 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
     const baseColour = getRandomBaseColour()
 
     const maxChangePerShift = 32
-    const minChangePerShift = 20
+    const minChangePerShift = 26
     let changePerShift = Math.floor(
         Math.random() * (maxChangePerShift - minChangePerShift) +
             minChangePerShift,
@@ -119,6 +119,10 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
 
     const options = [
         () => {
+            if (Math.random() < 0.2) {
+                return getComplementaryColorPalette(baseColour, colorAmount)
+            }
+
             const availableProperties: OKLCHProperty[] = [
                 'lightness',
                 'chroma',
@@ -156,7 +160,8 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
 
     if (
         colorAmount > 1 &&
-        chroma.deltaE(palette[0], palette[palette.length - 1]) < 2
+        (chroma.deltaE(palette[0], chroma.average(palette)) < 3 ||
+            chroma.deltaE(palette[0], palette[palette.length - 1]) < 2)
     ) {
         return getRandomPalette(colorAmount)
     }

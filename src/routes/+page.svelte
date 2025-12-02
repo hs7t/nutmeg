@@ -81,6 +81,8 @@
         width: 100dvw;
         height: 100dvh;
 
+        padding: 5vmin;
+
         display: flex;
         flex-direction: column;
     }

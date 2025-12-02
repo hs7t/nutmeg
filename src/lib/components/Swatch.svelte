@@ -42,16 +42,23 @@
 <div
     class="swatch"
     bind:this={element}
-    style:background-color={swatchData.colour.hex()}
-    style:color={contrastingColor}
+    style:--swatch-color={swatchData.colour.hex()}
+    style:--color-best-contrasting={contrastingColor}
 >
     <div class="info">
         <span class="text name">
             {swatchData.name}
         </span>
-        <span class="text reference">
+        <button
+            class="reference"
+            aria-label="Copy colour {swatchData.colour.hex()}"
+            title="Copy colour"
+            onclick={() => {
+                navigator.clipboard.writeText(swatchData.colour.hex())
+            }}
+        >
             {swatchData.colour.hex()}
-        </span>
+        </button>
     </div>
     <PinButton
         action={() => {
@@ -79,18 +86,37 @@
     .swatch .info {
         display: flex;
         flex-direction: column;
+        align-items: flex-start;
     }
 
     .swatch .info .text.name {
         font-weight: 500;
     }
 
-    .swatch .info .text.reference {
-        opacity: var(--t-opacity-B);
+    .swatch .info button.reference {
+        padding: 0.3ch;
+        margin: -0.3ch;
         font-size: var(--t-font-size-B);
+        cursor: pointer;
+
+        border-radius: var(--t-border-radius-A);
+        background-color: transparent;
+        opacity: var(--t-opacity-B);
+        color: var(--color-best-contrasting);
+
+        transition: all 80ms;
     }
 
-    .swatch .info .text.reference:hover {
+    .swatch .info button.reference:hover {
         opacity: 1;
+
+        background-color: var(--color-best-contrasting);
+        color: var(--swatch-color);
+    }
+
+    .swatch .info button.reference:active {
+        background-color: var(--t-color-contrast-A);
+        color: var(--t-color-contrast-B);
+        transform: scale(1.2) rotate(-3deg);
     }
 </style>

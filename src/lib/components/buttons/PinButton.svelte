@@ -55,7 +55,6 @@
 
 <style>
     .pin-button {
-        all: unset;
         width: 1.3rem;
         height: 1.3rem;
         opacity: var(--t-opacity-B);

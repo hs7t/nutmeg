@@ -40,3 +40,15 @@ body {
     max-height: 100dvh;
     overflow: hidden;
 }
+
+button {
+    all: unset;
+    cursor: pointer;
+    user-select: none;
+}
+
+button:focus {
+    outline: dashed 0.2ch
+        var(--color-best-contrasting, var(--t-color-contrast-A));
+    outline-offset: 0.4ch;
+}

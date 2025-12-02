@@ -4,7 +4,7 @@
 
 <nav>
     <div class="section primary">
-        <p>Tinge</p>
+        <p>Nutmeg</p>
     </div>
     <button class="section" disabled inert title="Coming soon, hopefully">
         Settings

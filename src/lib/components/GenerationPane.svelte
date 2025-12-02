@@ -15,6 +15,8 @@
         align-items: center;
         justify-content: center;
 
+        container-name: generation-pane;
+
         border-radius: var(--t-border-radius-A);
 
         background-color: var(--t-color-theme-B);
@@ -24,7 +26,7 @@
         --color-best-contrasting: var(--t-color-theme-B-contrast);
 
         padding: 0.8ch;
-        font-size: 3rem;
+        font-size: clamp(1rem, 3rem, 8cqi);
         background-color: var(--color-best-contrasting);
         color: var(--t-color-theme-B);
         font-feature-settings: 'wdth' 70;

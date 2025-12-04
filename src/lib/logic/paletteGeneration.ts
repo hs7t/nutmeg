@@ -44,7 +44,7 @@ export const getComplementaryColorPalette = (
     return palette
 }
 
-export const getShiftPalette = (
+export const getColorShifts = (
     property: OKLCHProperty,
     baseColor: chroma.Color,
     shiftPercentage: number, // percentage of max oklch shift
@@ -69,7 +69,7 @@ export const fillPalette = (
     const colorLightnessShifts = []
     for (const color of palette) {
         colorLightnessShifts.push(
-            getShiftPalette(
+            getColorShifts(
                 'lightness',
                 color,
                 100 / colorAmountTarget, // 100 as in 100%

@@ -5,6 +5,7 @@ import type { OKLCHProperty } from './colorManipulation'
 
 import { MAX_HUE } from './colorManipulation'
 import { applyOKLCHPropertyShifts } from './colorManipulation'
+import { getRandomIndex } from './utilities'
 
 export const getRandomBaseColor = (): chroma.Color => {
     const doRandom = Math.random() < 0.1
@@ -59,6 +60,40 @@ export const getShiftPalette = (
     palette = applyOKLCHPropertyShifts(palette, property, shiftPercentage)
 
     return palette
+}
+
+export const fillPalette = (
+    palette: Array<chroma.Color>,
+    colorAmountTarget: number,
+) => {
+    const colorLightnessShifts = []
+    for (const color of palette) {
+        colorLightnessShifts.push(
+            getShiftPalette(
+                'lightness',
+                color,
+                100 / colorAmountTarget, // 100 as in 100%
+                colorAmountTarget,
+            ),
+        )
+    }
+
+    while (
+        palette.length - 1 > colorAmountTarget &&
+        colorLightnessShifts.length < 0
+    ) {
+        const randomIndex = getRandomIndex(colorLightnessShifts)
+        const workingItem = colorLightnessShifts[randomIndex]
+        colorLightnessShifts.splice(randomIndex, 1)
+
+        palette.push(workingItem[1])
+    }
+
+    let i = 0
+    while (palette.length < colorAmountTarget) {
+        palette.push(palette[i - (i % palette.length)])
+        i++
+    }
 }
 
 export const getScalePalette = (

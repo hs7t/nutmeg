@@ -12,6 +12,26 @@ export const chooseBestContrastingForColor = (
     return contrastA > contrastB ? optionA : optionB
 }
 
+type ColorPizzaResponse = {
+    paletteTitle: string
+    colors: [
+        {
+            name: string
+            hex: string
+            rgb: {
+                r: number
+                g: number
+                b: number
+            }
+            luminance: number
+            luminanceWCAG: number
+            bestContrast: 'black' | 'white'
+            requestedHex: string
+            distance: number
+        },
+    ]
+}
+
 export const getNamesForColors = async (
     colors: chroma.Color[],
 ): Promise<Array<string>> => {
@@ -31,7 +51,7 @@ export const getNamesForColors = async (
                     values: colorsSearchString,
                 },
             })
-            .json()) as any
+            .json()) as ColorPizzaResponse
     } catch {
         return colors.map(() => 'Unknown')
     }

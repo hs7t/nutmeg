@@ -80,9 +80,12 @@ export class Color {
 
 export type Palette = Array<Color>
 
-export const getPaletteFromCJSScale = (scale: chroma.Scale, colorAmount: number) => {
+export const getPaletteFromCJSScale = (scale: chroma.Scale, colorAmount: number): Palette => {
     const hexCodes = scale.colors(colorAmount)
-    const palette = hexCodes.map((code) => { chroma(code) })
+    const palette = hexCodes.map((code) => {
+        const properties = chroma(code).oklch() as Properties
+        return new Color(properties) 
+    })
     return palette
 }
 

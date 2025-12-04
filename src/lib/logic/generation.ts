@@ -5,6 +5,7 @@ import {
     getComplementaryColorPalette,
     getShiftPalette,
 } from './paletteGeneration'
+import { getRandomIndex } from './utilities'
 
 export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
     const baseColor = getRandomBaseColor()
@@ -27,15 +28,9 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
                 'chroma',
                 'hue',
             ]
-            const availablePropertiesLastIndex = availableProperties.length - 1
 
-            let randomIndex = Math.round(
-                Math.random() * availablePropertiesLastIndex,
-            )
-            if (randomIndex > availablePropertiesLastIndex)
-                randomIndex = availablePropertiesLastIndex
-
-            const chosenProperty = availableProperties[randomIndex]
+            const chosenProperty =
+                availableProperties[getRandomIndex(availableProperties)]
             console.log(chosenProperty)
 
             if (chosenProperty == 'hue') {

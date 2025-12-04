@@ -73,3 +73,12 @@ export const getCSSPropertyValue = (
 
     return result
 }
+
+export const getRandomIndex = (array: Array<unknown>) => {
+    const lastIndex = array.length - 1
+
+    let randomIndex = Math.round(Math.random() * lastIndex)
+    if (randomIndex > lastIndex) randomIndex = lastIndex
+
+    return randomIndex
+}

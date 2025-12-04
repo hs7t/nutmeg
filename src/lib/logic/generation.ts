@@ -19,10 +19,6 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
 
     const options = [
         () => {
-            if (Math.random() < 0.2) {
-                return getComplementaryColorPalette(baseColor, colorAmount)
-            }
-
             const availableProperties: OKLCHProperty[] = [
                 'lightness',
                 'chroma',
@@ -46,6 +42,24 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
                 changePerShift,
                 colorAmount,
             )
+        },
+        () => {
+            const methods = ['scalar', 'complimentary']
+            const chosenMethod = methods[getRandomIndex(methods)]
+            console.log(chosenMethod)
+
+            switch (chosenMethod) {
+                case 'scalar':
+                    {
+                        const colors = getShiftPalette(
+                            'lightness',
+                            baseColor,
+                            100 / colorAmount,
+                            colorAmount,
+                        )
+                    }
+                    break
+            }
         },
     ]
 

@@ -17,7 +17,7 @@ export class Color {
         this.properties = properties
     }
 
-    chromaJS = () => {
+    asChromaJS = () => {
         return chroma.oklch(...this.properties)
     }
 
@@ -44,7 +44,7 @@ export class Color {
         return result
     }
 
-    propertyStops = (property: PropertyID, stopQuantity: number) => {
+    getPropertyStops = (property: PropertyID, stopQuantity: number) => {
         const propertyMaxValue = getMaxValue(property)
         const workingPropertyIndex = getPropertyIndex(property)
 
@@ -67,6 +67,11 @@ export const getPaletteFromCJSScale = (scale: chroma.Scale, colorAmount: number)
     const hexCodes = scale.colors(colorAmount)
     const palette = hexCodes.map((code) => { chroma(code) })
     return palette
+}
+
+export const blendColors = (colorA: Color, colorB: Color): Color => {
+    const result = chroma.mix(colorA.asChromaJS(), colorB.asChromaJS(), 0.5, 'oklch')
+    return new Color([...result.oklch()])
 }
 
 function getMaxValue(property: PropertyID): number {

@@ -32,7 +32,7 @@ export class Color {
         }
 
         const baseHue = this.properties[2]
-        const startingHue = baseHue - degreeChangePerStep * -offset
+        const startingHue = baseHue - degreeChangePerStep * offset
 
         const result = []
 

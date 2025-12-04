@@ -1,9 +1,9 @@
-import chroma from 'chroma-js'
+import chroma, { type Color } from 'chroma-js'
 import type { OKLCHProperty } from './colorManipulation'
 import {
     getRandomBaseColor,
-    getComplementaryColorPalette,
     getShiftPalette,
+    getScalePalette,
 } from './paletteGeneration'
 import { getRandomIndex } from './utilities'
 
@@ -44,22 +44,23 @@ export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
             )
         },
         () => {
-            const methods = ['scalar', 'complimentary']
+            const methods = ['scalar']
             const chosenMethod = methods[getRandomIndex(methods)]
             console.log(chosenMethod)
-
+            let palette: Array<Color> = []
+    
             switch (chosenMethod) {
                 case 'scalar':
                     {
-                        const colors = getShiftPalette(
-                            'lightness',
-                            baseColor,
-                            100 / colorAmount,
-                            colorAmount,
-                        )
+                        const baseColorB = getRandomBaseColor()
+                        const mixedBaseColor = chroma.mix(baseColor, baseColorB, 0.5, 'oklch')
+                        const mixedLightnessShifts = getShiftPalette('lightness', mixedBaseColor, 10, 10)
+
+                        palette = getScalePalette([baseColor, mixedLightnessShifts[getRandomIndex(mixedLightnessShifts)], getRandomBaseColor()], colorAmount)
                     }
                     break
             }
+            return palette
         },
     ]
 

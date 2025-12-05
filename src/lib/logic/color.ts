@@ -1,4 +1,5 @@
 import chroma from 'chroma-js'
+import randomColor from 'randomcolor'
 
 export const MAX_LIGHTNESS = 1
 export const MAX_HUE = 360
@@ -120,6 +121,10 @@ export const blendColors = (colorA: Color, colorB: Color): Color => {
         'oklch',
     )
     return new Color([...result.oklch()])
+}
+
+export const getRandomBaseColor = () => {
+    return new Color(chroma(randomColor()).oklch())
 }
 
 function getMaxValue(property: PropertyID): number {

@@ -38,7 +38,7 @@ export class Color {
 
         const result = []
 
-        for (let i = 0; i < amount - 1; i++) {
+        for (let i = 0; i < amount; i++) {
             const hue = startingHue + degreeChangePerStep * i
             result.push(new Color([baseLightness, baseChroma, hue]))
         }

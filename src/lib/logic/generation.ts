@@ -1,5 +1,5 @@
 import { getRandomBaseColor } from "./color"
-import { generateBlendScalarPalette, generateClusteredPalette, generateLightnessShiftPalette, generatePoligonicPalette } from "./palettes"
+import { generateBlendScalarPalette, generateClusteredPalette, generateLightnessShiftPalette, generatePoligonicPalette, generateRandomPalette } from "./palettes"
 import { getRandomIndex } from "./utilities"
 
 export const getRandomPalette = (colorAmount: number) => {
@@ -26,6 +26,11 @@ export const getRandomPalette = (colorAmount: number) => {
             const steps = Math.floor(Math.random() * 3) + 2
             console.log(`Lightness shift, ${steps} steps`)
             return generateLightnessShiftPalette(colorAmount, getRandomBaseColor(), steps)
+        },
+        () => {
+            // Random (ish)
+            console.log('Random (ish)')
+            return generateRandomPalette(colorAmount)
         }
     ]
 

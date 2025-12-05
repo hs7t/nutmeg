@@ -3,6 +3,7 @@ import {
     blendColors,
     Color,
     getPaletteFromCJSScale,
+    getRandomBaseColor,
     type Palette,
     type PropertyID,
 } from './color'
@@ -16,7 +17,7 @@ export const generateBlendScalarPalette = (
     const blendedColor = blendColors(baseColorA, baseColorB)
     const blendedColorLightnesses = blendedColor.getPropertyStopsToMax(
         'lightness',
-        4,
+        10,
     )
     const midColor =
         blendedColorLightnesses[getRandomIndex(blendedColorLightnesses)]
@@ -73,6 +74,18 @@ export const generateLightnessShiftPalette = (
         palette = fitPaletteToLengthWithScale(colorAmount, palette)
     }
     return palette
+}
+
+export const generateRandomPalette = (
+    colorAmount: number
+) => {
+    const colors: Array<Color> = []
+
+    for (let i = 0; i < colorAmount; i++) {
+        colors.push(getRandomBaseColor())
+    }
+
+    return colors
 }
 
 // function fitPaletteToLengthWithShades(

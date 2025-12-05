@@ -42,7 +42,7 @@ export const getNamesForColors = async (
     for (const color of colors) {
         colorHEXCodes.push(color.asChromaJS().hex())
     }
-    const colorsSearchString = colors.join(',').replaceAll('#', '')
+    const colorsSearchString = colorHEXCodes.join(',').replaceAll('#', '')
 
     let result
     try {

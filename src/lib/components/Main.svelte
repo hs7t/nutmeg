@@ -61,6 +61,14 @@
         refreshPalette()
     })
     appEvents.addEventListener('generation', updateTheming)
+
+    onMount(() => {
+        document.addEventListener('keydown', (e) => {
+            if (e.key == 'E' && e.shiftKey && e.altKey) {
+                refreshPalette()
+            }
+        })
+    })
 </script>
 
 <div id="primary-container" bind:this={mainElement}>

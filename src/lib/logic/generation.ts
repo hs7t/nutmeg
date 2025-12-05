@@ -6,16 +6,19 @@ export const getRandomPalette = (colorAmount: number) => {
     const methods = [
         () => {
             // Blend scalar
+            console.log('Blend scalar')
             return generateBlendScalarPalette(colorAmount, getRandomBaseColor(), getRandomBaseColor())
         },
         () => {
             // Analog++
-            const points = Math.floor(Math.random() * 3) + 1
+            const points = Math.floor(Math.random() * 5) + 2
+            console.log(`Analog, ${points} points`)
             return generateClusteredPalette(colorAmount, getRandomBaseColor(), points)
         },
         () => {
             // N-adic
-            const points = Math.floor(Math.random() * 5) + 1
+            const points = Math.floor(Math.random() * 4) + 2
+            console.log(`N-adic, ${points} points`)
             return generatePoligonicPalette(colorAmount, getRandomBaseColor(), points)
         }
     ]

@@ -1,8 +1,9 @@
 :root {
-    --t-font-family-primary: 'Google Sans Flex', sans-serif;
+    --t-font-family-primary: 'IBM Plex Sans', sans-serif;
 
     --t-font-size-A: 1.2rem;
     --t-font-size-B: 0.9rem;
+    --t-font-size-C: 0.8rem;
 
     --t-color-primary: #222222;
     --t-color-background-A: #f4f4f4;

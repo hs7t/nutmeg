@@ -1,5 +1,6 @@
 import chroma from 'chroma-js'
 import ky from 'ky'
+import type { Palette } from './color'
 
 export const chooseBestContrastingForColor = (
     color: chroma.Color,
@@ -33,15 +34,15 @@ type ColorPizzaResponse = {
 }
 
 export const getNamesForColors = async (
-    colors: chroma.Color[],
+    colors: Palette,
 ): Promise<Array<string>> => {
     const url = new URL('https://api.color.pizza/v1/')
 
     const colorHEXCodes: Array<string> = []
     for (const color of colors) {
-        colorHEXCodes.push(color.hex())
+        colorHEXCodes.push(color.asChromaJS().hex())
     }
-    const colorsSearchString = colors.join(',').replaceAll('#', '')
+    const colorsSearchString = colorHEXCodes.join(',').replaceAll('#', '')
 
     let result
     try {

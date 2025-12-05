@@ -1,104 +1,39 @@
-import chroma, { type Color } from 'chroma-js'
-import type { OKLCHProperty } from './colorManipulation'
-import {
-    getRandomBaseColor,
-    getColorShifts,
-    getScalePalette,
-} from './paletteGeneration'
-import { getRandomIndex } from './utilities'
+import { getRandomBaseColor } from "./color"
+import { generateBlendScalarPalette, generateClusteredPalette, generateLightnessShiftPalette, generatePoligonicPalette, generateRandomPalette } from "./palettes"
+import { getRandomIndex } from "./utilities"
 
-export const getRandomPalette = (colorAmount = 4): Array<chroma.Color> => {
-    const baseColor = getRandomBaseColor()
-
-    const maxChangePerShift = 32
-    const minChangePerShift = 26
-    let changePerShift = Math.floor(
-        Math.random() * (maxChangePerShift - minChangePerShift) +
-            minChangePerShift,
-    )
-
-    const options = [
+export const getRandomPalette = (colorAmount: number) => {
+    const methods = [
         () => {
-            const availableProperties: OKLCHProperty[] = [
-                'lightness',
-                'chroma',
-                'hue',
-            ]
-
-            const chosenProperty =
-                availableProperties[getRandomIndex(availableProperties)]
-            console.log(chosenProperty)
-
-            if (chosenProperty == 'hue') {
-                // trust me bro
-                changePerShift /= Math.floor(Math.random() * 3 - 1)
-            } else if (chosenProperty == 'chroma') {
-                changePerShift /= Math.floor(Math.random() * 2 - 1)
-            }
-
-            return getColorShifts(
-                chosenProperty,
-                baseColor,
-                changePerShift,
-                colorAmount,
-            )
+            // Blend scalar
+            console.log('Blend scalar')
+            return generateBlendScalarPalette(colorAmount, getRandomBaseColor(), getRandomBaseColor())
         },
         () => {
-            const methods = ['scalar']
-            const chosenMethod = methods[getRandomIndex(methods)]
-            console.log(chosenMethod)
-            let palette: Array<Color> = []
-
-            switch (chosenMethod) {
-                case 'scalar':
-                    {
-                        const baseColorB = getRandomBaseColor()
-                        const mixedBaseColor = chroma.mix(
-                            baseColor,
-                            baseColorB,
-                            0.5,
-                            'oklch',
-                        )
-                        const mixedLightnessShifts = getColorShifts(
-                            'lightness',
-                            mixedBaseColor,
-                            10,
-                            10,
-                        )
-
-                        palette = getScalePalette(
-                            [
-                                baseColor,
-                                mixedLightnessShifts[
-                                    getRandomIndex(mixedLightnessShifts)
-                                ],
-                                getRandomBaseColor(),
-                            ],
-                            colorAmount,
-                        )
-                    }
-                    break
-            }
-            return palette
+            // Analog++
+            const points = Math.floor(Math.random() * 5) + 2
+            console.log(`Analog, ${points} points`)
+            return generateClusteredPalette(colorAmount, getRandomBaseColor(), points)
         },
+        () => {
+            // N-adic
+            const points = Math.floor(Math.random() * 4) + 2
+            console.log(`N-adic, ${points} points`)
+            return generatePoligonicPalette(colorAmount, getRandomBaseColor(), points)
+        },
+        () => {
+            // C/L shift
+            const steps = Math.floor(Math.random() * 3) + 2
+            console.log(`Lightness shift, ${steps} steps`)
+            return generateLightnessShiftPalette(colorAmount, getRandomBaseColor(), steps)
+        },
+        () => {
+            // Random (ish)
+            console.log('Random (ish)')
+            return generateRandomPalette(colorAmount)
+        }
     ]
 
-    const selection = options[Math.floor(Math.random() * options.length)] // seems useless right now but will be useful once more generation types available
-    const palette = selection()
-
-    if (
-        colorAmount > 1 &&
-        (chroma.deltaE(palette[0], chroma.average(palette)) < 3 ||
-            chroma.deltaE(palette[0], palette[palette.length - 1]) < 2)
-    ) {
-        return getRandomPalette(colorAmount)
-    }
-    return palette
+    const method = methods[getRandomIndex(methods)]
+    return method()
 }
-
-/*
-    NOTES
-    chroma = intensity of the color
-    hue = place in rainbow
-    lightness = well, yeah
-*/

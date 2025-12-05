@@ -43,7 +43,7 @@ export const refreshPalette = async () => {
 
         workingPalette[i] = {
             name: colorNames[i],
-            color: generatedColors[i],
+            color: generatedColors[i].asChromaJS(),
             locked: false,
         }
     }

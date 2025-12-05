@@ -48,14 +48,14 @@ export class Color {
     withPropertyPoligons = (property: PropertyID, points: number): Palette => {
         const workingPropertyIndex = getPropertyIndex(property)
         const growth = getMaxValue(property) / points
-        const result = []
+        const result: Palette = []
 
         for (let i = 0; i < points; i++) {
-            const workingColor = [...this.properties] as Properties
-            workingColor[workingPropertyIndex] =
-                (workingColor[workingPropertyIndex] + growth * i) %
+            const workingProperties = [...this.properties] as Properties
+            workingProperties[workingPropertyIndex] =
+                (workingProperties[workingPropertyIndex] + growth * i) %
                 getMaxValue(property)
-            result.push(workingColor)
+            result.push(new Color(workingProperties))
         }
 
         return result

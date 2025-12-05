@@ -40,16 +40,9 @@ export const generateClusteredPalette = (
 ) => {
     let palette = baseColor.withNeighbouringHues(points, true)
 
-    if (palette.length < colorAmount) {
-        const chromaJSPaletteColors = palette.map((color) => {
-            return color.asChromaJS()
-        })
-        palette = getPaletteFromCJSScale(
-            chroma.scale(chromaJSPaletteColors),
-            colorAmount,
-        )
+    if (palette.length != colorAmount) {
+        palette = fitPaletteToLengthWithScale(colorAmount, palette)
     }
-
     return palette
 }
 

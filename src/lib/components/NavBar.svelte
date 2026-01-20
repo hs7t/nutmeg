@@ -6,9 +6,6 @@
     <div class="section primary">
         <p>Nutmeg</p>
     </div>
-    <button class="section" disabled inert title="Coming soon, hopefully">
-        Settings
-    </button>
     <button
         class="action"
         onclick={() => {
